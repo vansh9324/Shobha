@@ -125,7 +125,7 @@ def build_plate(service: Resource,
     """
     # 1. pull bytes & background-remove
     raw_bytes = _download_drive_file(service, file_id)
-    fg_rgba   = Image.open(io.BytesIO(rembg_remove(raw_bytes))).convert("RGBA")
+    fg_rgba   = Image.open(io.BytesIO(rembg_remove(raw_bytes, alpha_matting=False))).convert("RGBA")
 
     # 2. trim and downsize
     fg_rgba = fg_rgba.crop(fg_rgba.getbbox())
