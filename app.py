@@ -4,8 +4,14 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build as gbuild
 from plate_maker import build_plate
 
-# ── creds from env var --------------------------------------------------
-SA_INFO = json.loads(base64.b64decode(os.environ["DRIVE_SA_B64"]))
+
+raw = os.environ["DRIVE_SA_B64"]
+try:
+    SA_INFO = json.loads(base64.b64decode(raw))
+except (ValueError, base64.binascii.Error):
+    # not base64, maybe raw JSON
+    SA_INFO = json.loads(raw)
+
 CREDS   = Credentials.from_service_account_info(SA_INFO,
             scopes=["https://www.googleapis.com/auth/drive"])
 DRIVE   = gbuild("drive", "v3", credentials=CREDS, cache_discovery=False)
